@@ -1,0 +1,160 @@
+<!-- products thumbnail list view -->
+
+<div class="sortPagiBar shop_box_row shop_box_row clearfix">
+   
+    <!--<ul class="product_view clearfix hidden-xs">
+        <li id="product_view_grid" class="current "><i class="icon-th-large"></i></li>
+        <li id="product_view_list" class=""><i class="icon-th-list"></i></li>
+    </ul>-->
+    
+    <!-- plugin hook: 'frontend_category' -->
+    {* @event frontend_category.%plugin_id% *}
+    <div class="count_product_page" style="display:block; float:right;">{foreach $frontend_category as $_}{$_}{/foreach}</div>
+    
+    <div class="sorting_list">
+        <div class="sort_box">
+  	       
+            <div class="list_button"> 
+                <noindex>
+                    <ul class="menu-h2 sorting">
+                        <li><a href="javascript:;" rel="nofolow">Сортировать по:</a></li>
+                        <li><a href="?sort=price&order=asc" rel="nofolow">Цена(сперва дешевле)</a></li>
+                        <li><a href="?sort=price&order=desc" rel="nofolow">Цена(сперва дорогие)</a></li>
+                        <li><a href="?sort=name&order=asc" rel="nofolow">А-я</a></li>
+                        <li><a href="?sort=name&order=desc" rel="nofolow">Я-а</a></li>
+                        <li><a href="?sort=stock&order=asc" rel="nofolow">В наличии</a></li>
+                    </ul>
+                </noindex>
+                <span class="button_arr"></span>
+            </div>
+          
+           
+        </div>
+    </div>
+    <!--{if !empty($sorting)}
+        
+        {$sort_fields = [
+            'name' => '[`Name`]',
+            'price' => '[`Price`]',        
+            'total_sales' => '[`Bestsellers`]',
+            'rating' => '[`Customer rating`]',
+            'create_datetime'=>'[`Date added`]',
+            'stock' => '[`In stock`]']}
+        {if !isset($active_sort)}
+            {$active_sort = $wa->get('sort', 'create_datetime')}
+        {/if}
+        <span style="display:block; float:left; margin-right:10px; margin-top:5px;"></span>
+        
+        <ul style="display:block; overflow:hidden; height:25px; width:150px; border:1px solid #000;padding:5px;">
+           
+            {if !empty($category) && !$category.sort_products}
+                <li{if !$active_sort} class="selected"{/if} style="margin-bottom:3px;"><a href="{$wa->currentUrl(0, 1)}">[`New & Popular`]</a></li>
+            {/if}
+            {foreach $sort_fields as $sort => $name}
+                <li{if $active_sort == $sort} class="selected"{/if} style="margin-bottom:3px;">{$wa->shop->sortUrl($sort, $name)}</li>
+                {if $wa->get('sort') == $sort}{$wa->title( $wa->title()|cat:' — '|cat:$name)}{/if}
+            {/foreach}
+        </ul>
+    {/if}-->
+</div>
+
+
+
+<ul id="product_list" class="grid row product-list">
+{$i = 1}
+
+{foreach $products as $p}
+    {$pfeatures = $wa->shop->product($p.id)}
+        <li class="ajax_block_product col-xs-12 col-sm-6 col-md-4 col-lg-4 num-{$i}">
+        
+        	<div class="inner_content clearfix">
+        		<a class="product_img_link" href="{$p.frontend_url}" title="{$p.name}">
+                    <div class="image_b image_b_{$p.id}" itemtype="http://schema.org/ImageObject" itemscope="" idf="389">
+                        {$wa->shop->productImgHtml($p, '250', ['itemprop' => 'image','class'=>'t_image', 'alt' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
+                    </div>
+                </a>
+        		<div class="center_block">
+        			<div class="product_flags clearfix">
+                        <span class="availability title_shop">В наличии</span>
+                        <span class="online_only title_shop">Только онлайн!</span>                  
+        			</div>
+                    <div class="clear"></div>
+                    <!--<div class="new-box"><span class="before"></span><span class="after"></span><span class="new">Новый</span></div>-->
+                    <div class="sale-box"><span class="before"></span><span class="after"></span>
+                    {if $p.compare_price != 0}
+                    <span class="on_sale title_shop">Акция!</span>
+                        {/if}
+            		
+                    </div>
+                    <div class="clearfix"></div>
+                    <h5><a class="product_link" href="{$p.frontend_url}" title="{$p.name}">{$p.name}</a></h5>
+                    <noindex>
+                    <div class="parametr_p"><span>Вес:</span> {$pfeatures.features['weight'].value} гр.</div>
+                    <div class="parametr_p"><span>Длина:</span> {if $pfeatures.features.dlina}{$pfeatures.features['dlina'].value}{/if} см.</div>
+                    <div class="parametr_p"><span>Диаметр ушка:</span> {if $pfeatures.features.diametr_shirina}{$pfeatures.features['diametr_shirina'].value} см.{/if}</div>
+                    </noindex>
+                    <p class="product_desc">{$pr.summary}</p>
+                    <p class="product_desc mob">{$pr.summary}</p>
+                    <p class="product_desc mob2">{$pr.summary}</p>  
+        		</div>																				 
+        		<div class="right_block">
+        			<span class="discount title_shop"><!--Цена снижена!--></span>
+        			
+        			<span class="price">
+        			{$new_price = shopFlexdiscountPluginHelper::price($p)}
+        		        {if $wa->user('create_method') == "add"}
+            		        <a href="/prays-list-dlya-optovikov/" target="_blank">Цены для оптовых клиентов</a>
+            		    {else}
+            		        {$new_price}
+            		        <!--{$old_price = $p.price}
+        			        {if $old_price != 0 && $old_price != $new_price}<span class="price price-old price_{$p.id}">{shop_currency($p.price)}</span><span class="hidden_product_id">{$p.id}</span>{/if}</span>-->
+        			        
+        			        
+        			        
+            		   {/if}
+        		    
+        			<!--<p class="compare checkbox choices-thin clearfix hidden-xs">		
+                        <input type="checkbox" class="compare-add comparator" id="comparator_item_{$i}" value="comparator_item_{$i}"  autocomplete="off"/> 
+                        <label>Выбрать для сравнения</label>
+                    </p>-->
+                    <!--<a class="compare-add inline-link proj_detailed_compare add_to_cart_custom" href="#" data-product="16" "="">Добавить к сравнению</a>
+                    <a class="compare-remove inline-link proj_detailed_compare add_to_cart_custom" href="#" data-product="16" "="" style="display:none">Удалить из сравнения</a>-->       			<div class="clear noneclass"></div>
+        			
+        			<!--<a class="ajax_add_to_cart_button btn btn-default exclusive btn_add_cart" rel="ajax_id_product_1" href="javascript:;" title="В корзину">
+                        <span class="add2cart btn_{$p.id}" onClick="add_cart('{$p.id}','1')">В корзину</span>
+                    </a>-->
+        			<a class="btn btn-default button" href="{$p.frontend_url}" title="В корзину">В корзину</a>          
+        		</div>
+            </div>
+        </li>
+        {$i=$i+1}
+{/foreach}
+</ul>
+
+
+
+<div class="bottom_pagination shop_box_row clearfix">
+    <script type="text/javascript">
+    // <![CDATA[
+    var min_item = "Выберите по крайней мере один товар";
+    var max_item = "Нельзя добавить больше чем 2 товаров для сравнения";
+    //]]>
+    </script>
+    <!--  <form class="form_compare hidden-xs" onsubmit="true" action="http://livedemo00.template-help.com/prestashop_47944/index.php?controller=products-comparison" method="post">
+        <p>
+          <a id="compare-link" class="add_to_cart_custom" href="/compare//" rel="nofollow" style="margin-top: 10px;padding: 4px 10px;margin-left: 13px;">Страница сравнения </a>
+            
+            <input id="bt_compare_bottom compare-link" class="button btn btn-default" type="submit" value="Сравнить">
+            <input class="compare_product_list" type="hidden" value="" name="compare_product_list">
+        </p>
+    </form>-->
+    <noindex>
+        {if isset($pages_count) && $pages_count > 0}
+            <div id="pagination_bottom" class="pagination block lazyloading-paging">
+                
+                    {wa_pagination total=$pages_count attrs=['class' => "pagination menu-h"]}
+                
+            </div>
+        {/if}    
+    </noindex>
+</div>

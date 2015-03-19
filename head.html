@@ -1,0 +1,44 @@
+    <!-- shop app css -->
+
+<link href="{$wa_theme_url}bootstrap.min.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<link href="{$wa_theme_url}font.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<link href="{$wa_active_theme_url}main_menu.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<link href="{$wa_active_theme_url}templatecss.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<link href="{$wa_active_theme_url}opt_style.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<link href="{$wa_active_theme_url}responsive.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Pinyon+Script">
+<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic">
+
+
+<!-- js -->
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js?v{$wa->version(true)}"></script>
+<script type="text/javascript" src="{$wa_app_static_url}js/lazy.load.js?v{$wa->version()}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}lazyloading.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}category.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}product.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}clear.shop.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}templatejs.js?v{$wa_theme_version}"></script>
+
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.nivo.slider.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}bootstrap.min.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}mainscript.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.core-ui-select.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.scrollpane.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.uniform.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}plugins.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}footable.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.mousewheel.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.carouFredSel-6.2.1-packed.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="{$wa_active_theme_url}touchswipe.min.js?v{$wa_theme_version}"></script>
+<script type="text/javascript" src="/wa-data/public/shop/themes/clear/arcticmodal.js"></script>
+
+
+{if !empty($nofollow)}
+    <!-- "nofollow" for pages not to be indexed, e.g. customer account -->
+    <meta name="robots" content="noindex,nofollow" />
+{/if}
+
+<!-- plugin hook: 'frontend_head' -->
+{* @event frontend_head.%plugin_id% *}
+{foreach $frontend_head as $_}{$_}{/foreach}

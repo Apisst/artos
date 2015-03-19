@@ -1,0 +1,19 @@
+{if !isset($frontend_homepage)}
+    <div class="breadcrumb">
+        <div class="breadcrumb_inset">
+            <a class="breadcrumb-home" href="/" title="Вернуться на главную"><i class="icon-home"></i></a>
+            {if $breadcrumbs}
+                {foreach $breadcrumbs as $breadcrumb}><a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>{/foreach} >
+            {else}
+                <span class="navigation-pipe" >&gt;</span>  
+            {/if}
+            <a class="p" href="{$wa->currentUrl()}">{$wa->title()|escape}</a>
+        </div>
+    </div>
+{/if}            
+{$content}
+    
+
+
+
+

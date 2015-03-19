@@ -1,0 +1,15 @@
+<!-- storefront navigation -->
+<div class="app-navigation" role="navigation">
+
+    <!-- info pages -->
+    {$shop_pages=$wa->shop->pages()}
+    
+    <!-- phone number -->
+   
+    
+    {if isset($category)}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
+    {$categories = $wa->shop->categories(0, null, true)}
+    
+	<div class="clear-both"></div>
+	
+</div>

@@ -1,0 +1,53 @@
+<h1>{$category.name|escape}</h1>
+<div class="descr">
+    <div class="row_category clearfix">
+    <!-- Category image -->
+        <div class="cat_desc clearfix" id="category_description_short">
+            {$category_id = $p.category_id}
+            {$parent_cat = $wa->shop->category($category_id)}
+            {$parent_cat['parent_cat']}
+            <div class="description_text">
+                <article>
+                    <div class="align_center category_image ">
+                        {$categoryImageUrl = shopCategoryImagesPlugin::getCategoryImageUrl($category.id)}{if $categoryImageUrl !== false}<img src="{$categoryImageUrl}"  width="86px"/>{/if}
+                    </div>
+                    {$category.description}
+                </article>
+            </div>    
+        </div>
+    </div>
+</div>
+
+<span class="read_all_text" title="Читать полностью о {$wa->title()|escape}"> </span>
+  <span class="read_all_text_off"> </span>
+
+{if $category.subcategories}
+    <div id="subcategories" class="titled_box">
+        <h2>Подкатегории</h2>
+        <ul class="row">
+        {foreach $category.subcategories as $sc}
+        	<li class="categories_box col-xs-4 col-sm-3 col-md-3 col-lg-2    ">
+        		<a class="lnk_more_img" href="{$sc.url}" title="">
+            		{$categoryImageUrl = shopCategoryImagesPlugin::getCategoryImageUrl($sc.id)}
+            		{if $categoryImageUrl !== false}<img src="{$categoryImageUrl}" width="120px" />{else}<img src="/images/no-image.png" width="100px" />{/if}
+        		</a>
+                <a class="lnk_more_sub" href="{$sc.url}" title="{$sc.name|escape}"> {$sc.name|escape}</a>
+        	</li>
+        {/foreach}	
+        </ul>
+    </div>
+{/if}
+
+    {if !$products}
+                        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting)}
+    {else}
+                        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting)}
+    {/if}
+
+
+                
+		    
+
+
+
+

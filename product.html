@@ -1,0 +1,380 @@
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
+
+
+
+<div id="primary_block" class="clearfix">
+    <div class="row">
+        <div id="pb-right-column" class="col-xs-12 col-sm-5">
+		    <h1 class="pb-right-colum-h">{$product.name|escape}</h1>
+	            <div id="image-block" class="image_b image_b_{$product.id}">
+					<span id="view_full_size">
+                        <a id="zoom1" rel="position: 'inside' , showTitle: false, adjustX:0, adjustY:0" class="cloud-zoom" href="{$wa->shop->productImgUrl($product, '970')}" >
+                            {$wa->shop->productImgHtml($product, '750x0', [ 'itemprop' => 'image','class'=>'t_image', 'id' => 'mousetrap_img', 'alt' => $product.name|escape])}
+                            {$wa->shop->productImgHtml($product, '750x0', [ 'itemprop' => 'image', 'id' => 'bigpic', 'alt' => $product.name|escape ])}    
+                            <span class="mask"></span>	
+			            </a>
+             		</span>
+				</div>
+				
+		
+		{if count($product.images) >= 1}
+            <div class="gallery" id="product-gallery">
+                {foreach $product.images as $image}
+                    <div class="image">                    
+                        <a id="product-image-{$image.id}" >{$wa->shop->productImgHtml(['id'=> $product.id,  'image_id' => $image.id, 'ext' => $image.ext, 'image_desc' => $image.description], '200', ['alt' => $product.name|cat:' - ':$image.description|escape])}</a>
+                    </div>
+                {/foreach}
+                
+                
+                
+            </div>
+            {if $product.features}
+                    {foreach $product.features as $f_code => $f_value}
+                        {if $features[$f_code].name|escape == "Видео"}
+                            <div class="video_icon">
+                                
+                            </div>
+                        {/if}
+                    {/foreach}
+                {/if}
+        {/if}  
+		
+		
+		
+		
+		
+	    </div>
+	    <!-- left infos-->
+	    <div id="pb-left-column" class="col-xs-12 col-sm-7">
+    		<h1>{$product.name|escape}</h1>
+            <div id="short_description_block">
+    			<div id="short_description_content" class="rte align_justify"><p>{$product.summary}</p>
+    			    {$pfeatures = $wa->shop->product($product.id)}
+    			    
+    			    {if $pfeatures.features.dlina}<div class="features_box"><span class="features_row">Длина:</span><span class="val_features">{$pfeatures.features['dlina']}</span></div>{/if}
+    			    {if $pfeatures.features.diametr_shirina}<div class="features_box"><span class="features_row">Диаметр ушка:</span><span class="val_features">{$pfeatures.features['diametr_shirina']}</span></div>{/if}
+                    {if $pfeatures.features.weight}<div class="features_box"><span class="features_row">Вес:</span><span class="val_features">{$pfeatures.features['weight']}</span></div>{/if}
+    			    {if $pfeatures.features.metall}<div class="features_box"><span class="features_row">Металл:</span><span class="val_features metall">{foreach $pfeatures.features['metall'] as $podklyuchenie}{$podklyuchenie}{/foreach}</span></div>{/if}
+    		
+    			</div>
+    			<div style="display:block; float:left; width:100%; height:55px">
+    			{if $product.features}
+                        <ul  class="bullet">
+                        {literal}
+                        <script>
+                        $(function(){
+                            
+                            
+                            $(".Vstavka").change(function(){
+                                size = $(".size").val();
+                                vstavka = $(".Vstavka").val();
+                                $(".count_products_tocart").val("0");
+                                
+                                var links = $('.sku_price');
+                                
+                                for(var i=0; i<links.length; i++) 
+                                {
+                                    $name_sku = links[i].innerHTML;
+                                    if($name_sku.indexOf(vstavka) + 1)
+                                    {
+                                        pos_price = $name_sku.split(" -");
+                                        price_pr = pos_price[1].replace("руб.", "Р");
+                                        $('.flexdiscount-price').html( price_pr);
+                                    }
+                                }
+                            });
+                            
+                            
+                            
+                        });
+                        </script>
+                        {/literal}
+                        {foreach $product.features as $f_code => $f_value}
+                                {if $features[$f_code].name|escape == "Размер"}
+                                
+                                {else}
+                                    {if $features[$f_code].name|escape == "Основная вставка"}
+                                        <li><i class="icon-angle-right"></i> <span>  <strong>{$features[$f_code].name|escape}</strong>
+                                            {if $f_value|@count > 1}
+                                                <select name="Vstavka" class="Vstavka">
+                                                    <option>
+                                                    {implode('<option>', $f_value)}
+                                                </select>
+                                            {else}
+                                                <select name="Vstavka" class="Vstavka" style="display:none">
+                                                    <option>
+                                                    {implode('<option>', $f_value)}
+                                                </select>
+                                                {implode('<span>', $f_value)}
+                                            {/if}
+                                        </li>
+                                    
+                                    {/if}
+                                {/if}
+                        {/foreach}
+                        
+                        </ul>
+                    {/if}
+    			</div>
+    			<!-------------------------------------------------------------------------------->
+    			<!-------------------------------------------------------------------------------->
+    			<!-------------------------------------------------------------------------------->
+    			
+    			{literal}
+    			    <script>
+    			     $(function(){
+    			        $(".pluss").click(function(){
+    			            
+    			           countplus = $(this).attr("count_plus");
+    			           $("#product_tocart_"+countplus).val(Number($("#product_tocart_"+countplus).val())+1) ;
+    			        });
+    			        
+    			        
+    			        $(".minuss").click(function(){
+    			           countminus = $(this).attr("count_minus");
+    			           if ($("#product_tocart_"+countminus).val()>0){ $("#product_tocart_"+countplus).val(Number($("#product_tocart_"+countminus).val())-1) };
+    			        });
+    			        
+    			        $(".count_products_tocart").keyup(function(){
+    			            if ($(this).val()<0){$(this).val("0"); }
+    			        });
+    			     });
+    			    </script>
+    			{/literal}
+    			
+    			<div class="opt__size_box">
+    			{foreach $product.categories as $category}{$cat_id=$category.id}{/foreach}
+    			<p>Укажите сколько изделий вы хотите купить:</p>
+    			    {$tmp_inp = 0}
+    			    {if $cat_id == 1}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 2}{$tmp_inp = 1}{/if}
+    			    
+    			    {if $cat_id == 19}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 30}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 31}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 50}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 52}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 49}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 51}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 53}{$tmp_size_number = 40}{$step_size = 5}{/if}
+    			    {if $cat_id == 20}{$tmp_size_number = 17}{$step_size = 0.5}{/if}
+    			    {if $cat_id == 40}{$tmp_size_number = 16}{$step_size = 0.5}{/if}
+    			    {if $pfeatures.features.razmer}
+    			        {foreach $pfeatures.features['razmer'] as $size}
+    			            {$tmp_size = $tmp_size_number}
+    			            <div class="size_count size_count_{$tmp_inp}">
+    			                <span size_pr="{$tmp_size}">{$size}</span>
+    			                <div class="count_plus">
+    			                     <div class="count_pluss_minuss_box c_p_m_b_{$tmp_inp}">
+        			                     <div class="pluss" count_plus="{$tmp_inp}"></div>
+        			                     <div class="minuss" count_minus="{$tmp_inp}"></div>
+    			                     </div>
+    			                    <input type="text" name="count" value="0" class="count_products_tocart" id="product_tocart_{$tmp_inp}" idproduct="{$tmp_inp}">
+    			                    
+    			                </div>
+    			                {if ($cat_id == 1) or ($cat_id == 50) or ($cat_id == 49) or ($cat_id == 51) or ($cat_id == 52) or ($cat_id == 53)}<div class="size_price_count size_price_count_{$tmp_inp}"></div>{/if}
+    			            </div>
+    			            {$tmp_inp = $tmp_inp+1}
+    			            {$tmp_size_number = $tmp_size_number+$step_size}
+    			            
+    			        {/foreach}
+    			    {else}
+    			    <div class="size_count size_count_{$tmp_inp}" style="display:block; width:100%; margin:0px 0px 20px 0px; padding:0px">
+    			                Количество:
+    			                <span size_pr="{$tmp_size}" style="display:none"><span>{$size}</span></span>
+    			                <div class="count_plus">
+    			                     <div class="count_pluss_minuss_box c_p_m_b_{$tmp_inp}">
+        			                     <div class="pluss" count_plus="{$tmp_inp}"></div>
+        			                     <div class="minuss" count_minus="{$tmp_inp}"></div>
+    			                     </div>
+    			                    <input type="text" name="count" value="1" class="count_products_tocart" id="product_tocart_{$tmp_inp}" >
+    			                    
+    			                </div>
+    			                
+    			            </div>
+    			    {/if}
+    			    
+    			</div>
+    			
+    			<!-------------------------------------------------------------------------------->
+    			<!-------------------------------------------------------------------------------->
+    			<!-------------------------------------------------------------------------------->
+    			
+    			<div class="toggle_content">
+                    {if ($cat_id == 1) or ($cat_id == 50) or ($cat_id == 49) or ($cat_id == 51) or ($cat_id == 52) or ($cat_id == 53)}
+                        <select name="Vstavka" class="Vstavka" style="display:none">
+                            <option>Цепи
+                        </select>
+                    {/if}
+                </div>
+            </div>	
+                            {$sku_price = ""}
+                            {foreach $product.skus as $sku}
+                                     {if $sku_price != shop_currency($sku.price, $product.currency)}
+                                          <span class="sku_price" style="float:none; display:none">{$sku.name} -{shop_currency($sku.price, $product.currency)}</span>
+                                         
+                                     {/if}
+                                     
+                             {/foreach}
+           
+           
+           {if ($cat_id == 1) or ($cat_id == 50) or ($cat_id == 49) or ($cat_id == 51) or ($cat_id == 52) or ($cat_id == 53)}
+           
+                {literal}
+                <script>
+                    $(document).ready(function(){
+                        var links_price = $('.sku_price');
+                            for(var i=0; i<links_price.length; i++) 
+                            {
+                                $name_sku_price = links_price[i].innerHTML;
+                                pos_price_sku = $name_sku_price.split(" -");
+                                price_pr = pos_price_sku[1].replace("руб.", "Р");
+                                $('.size_count_'+i).css("width","100%");
+                                $('.size_price_count_'+i).html(price_pr);
+                             }
+                        
+                    });
+                </script>
+                {/literal}
+           
+           
+           
+           {/if}
+           
+           
+           
+           
+		{if shopSizeProduct::getSize($product.id) != "no-size"}
+	          	                    <select class="sku-feature-{$product.id} sku-feature-my" name="features[6]" data-feature-id="6" style="display:none">
+      	          	                    {shopSizeProduct::getSize($product.id)}
+                                    </select>
+  	    {/if}
+         
+    		<!-- add to cart form-->
+            <form id="buy_block"  action="#" method="post">
+                <div class="product_attributes">
+    		        <div class="row-3">
+                        <p id="availability_statut" style="display: none;">
+        				    <span id="availability_label">Наличие:</span>
+        				    <span id="availability_value"></span>
+        		        </p>
+                        <!--На складе-->
+                        <p id="pQuantityAvailable"> 
+            				<span id="quantityAvailable"><!--99--></span>
+            				<span  style="display: none;" id="quantityAvailableTxt"><!--шт на складе--></span>
+            				<span  id="quantityAvailableTxtMultiple"><!--шт в наличии--></span>
+            			</p>
+            			<!--На складе конец-->
+            			<p id="product_reference" style="display: none;"> 
+                            <label>Артикул: </label>
+                            <span class="editable"></span>
+            			</p>
+                        <span class="online_only"><!--Только онлайн--></span>
+                    </div>
+        			<!-- minimal quantity wanted -->
+        			<p id="minimal_quantity_wanted_p" style="display: none;">
+        				Данный товар не продается по одной единице. Вы должны выбрать по крайней мере <b id="minimal_quantity_label">1</b> единиц данного товара.
+        			</p>
+        		</div>
+                <div class="content_prices clearfix">
+                        <!-- prices -->
+               {$pfeatures = $wa->shop->product($product.id)}
+                    {foreach $product.features as $f_code => $f_value}
+                	{if $features[$f_code].name|escape == "Акция"}
+                    <div class="row-2" >
+                       
+                        <p id="reduction_amount"  style="display:none"><span id="reduction_amount_display" class="price"></span></p>
+                        <p id="old_price"><span id="old_price_display" class="price price-old">{if $product.compare_price != 0}<span class="price price-old">{shop_currency_html($product.compare_price)}</span>{/if}</span></p>
+                	    <img src="/images/discont.gif" alt="Распродажа" class="on_sale_img"/>
+            			<span class="on_sale">Акция!</span>
+            		
+                    </div>
+                    {/if}
+            		{/foreach}
+                    
+                    
+                	<div class="row_1">
+            			<p class="our_price_display">
+            			    <span  id="our_price_display">
+            		            {if $wa->user('create_method') == "add"}
+            		                <a href="/prays-list-dlya-optovikov/" target="_blank">Цены для оптовых клиентов</a>
+            		            {else}
+            		                {shopFlexdiscountPluginHelper::price($product)}
+            		                {$old_price = $product.price}
+                			        {if $old_price != 0}
+                			            <span class="price price-old price_{$product.id}" style="font-size:14px;color: #999; margin-left: 10px;">{shop_currency($product.price)}</span>
+                			            <span class="hidden_product_id" style="display:none">{$product.id}</span>
+                			        {/if}
+        			        
+        			         </span>
+        			     </span>
+		                </p>
+            		    {/if}
+                        <p id="add_to_cart" class="buttons_bottom_block">
+                            <a class="exclusive button btn btn-default btn_add_cart add2cart btn_14" href="javascript:;" onclick="add_cart('{$product.id}','{$tmp_inp}')">
+                                
+                                <span  >В корзину</span>
+                            </a>
+            				<input id="add2cartbtn" type="submit" name="Submit" value="Добавить в корзину" />
+                            <span class="exclusive btn btn-default disabled" style="display:none;">
+                                <span></span>
+                                Добавить в корзину
+                            </span>
+                        </p>
+                            <!-- quantity wanted -->
+            				<!--<p id="quantity_wanted_p">
+                                <label>Количество:</label>
+                                <a href="#" class="product_quantity_down button btn btn-default" rel="qty"><i class="icon-minus"></i></a>
+                                <input type="text" name="qty" id="quantity_wanted" class="form-control" value="1" size="2" maxlength="3"  />
+                                <a href="#" class="product_quantity_up button btn btn-default" rel="qty"><i class="icon-plus"></i></a>
+                            </p>-->
+                	</div>
+                    
+                </div>
+                    <!--<p class="buttons_bottom_block">
+                    	<a href="#" id="wishlist_button" class="btn btn-default" onclick="WishlistCart('wishlist_block_list', 'add', '1', $('#idCombination').val(), document.getElementById('quantity_wanted').value); return false;"  title="Добавить в список" rel="nofollow"><i class="icon-heart-empty"></i>Добавить в список</a>
+                    </p>-->
+           
+        			<!-- Out of stock hook -->
+            </form>
+            <noindex> 
+                <div id="ShareDiv" class="addsharethis">
+                    <div class="addsharethisinner">
+                        <script type="text/javascript" src="//yandex.st/share/share.js"charset="utf-8"></script>
+                        <div class="yashare-auto-init" data-yashareL10n="ru"
+                        data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir" data-yashareTheme="counter" style="float:right; margin-bottom:20px"></div> 
+                    </div>
+                </div>
+            </noindex>
+        </div>
+    </div>
+
+</div>
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="clear"></div>
+
+
+<div class="extra-box-product">
+
+
+
+{if $product.description != ""}
+<section class="page_product_box toggle_frame more_info_inner">
+	<h3 class="toggle">Подробнее<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+	<div class="toggle_content">
+		{$product.description}
+    </div> 
+</section>  
+{/if}
+ 
+<!--<section id="last_page_product" class="page_product_box toggle_frame">
+    <h3 href="#idTab5" class="idTabHrefShort">Комментарии<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+	    <div id="more_info_sheets" class="toggle_content toggle_content_comment">
+            <div id="idTab5">
+	            <div id="product_comments_block_tab">
+					include file='reviews.html'
+				</div>
+            </div>
+        </div>
+</section>-->
+</div>

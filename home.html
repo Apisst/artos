@@ -1,0 +1,111 @@
+{$promos = $wa->shop->productSet('popular')}    
+<div class="page_wrapper_2 clearfix">
+    <div id="columns" class="container">
+        <div class="row">
+            <div id="center_column" class="center_column col-xs-12 col-sm-12 clearfix" style="padding-left:0px; padding-right:0px">
+                <div id="featured-products_block_center" class="main_page_products block">
+                    <!--<h4><span>Избранные товары</span></h4>
+                        <ul class="row">
+                            {$i = 0}
+                            {foreach $promos as $pr}
+                            <li class="ajax_block_product col-xs-12 col-sm-6 col-md-3  first_item_of_line   first_item_of_tablet_line ">
+                                <div class="inner_content clearfix">
+                                    <div class="product_image">
+                                        <a href="{$pr.frontend_url}" title="{$pr.name}" class="product_image">
+                                            <div class="image_b image_b_{$pr.id}">
+                                            {$wa->shop->productImgHtml($pr, '200', ['itemprop' => 'image','class'=>'t_image', 'alt' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
+                                        </div>
+                                            
+                                        </a>
+                                    </div>
+                                    <div class="new-box">
+                                        <span class="before"></span>
+                                        <span class="after"></span>
+                                       <span class="new">Новые</span>
+                                    </div>
+                                    <div class="sale-box">
+                                        <span class="before"></span>
+                                        <span class="after"></span>
+                                        {if $pr.compare_price != 0}<span class="on_sale title_shop">Акция</span>{/if}
+                                    </div>
+                                    <p class="price_container">
+                                        <span class="price price-new"> 
+                                        {if $wa->user('create_method') == "add"}
+            		    <a href="/prays-list-dlya-optovikov/" target="_blank">Цены для оптовых клиентов</a>
+            		    {else}
+            		    {shopFlexdiscountPluginHelper::price($pr)}</span></p>
+            		    {/if}
+                                        
+                                            
+                                        </span>
+                                        <span class="price-old">
+                                        {if $pr.compare_price}
+                                            
+                                            {shop_currency_html($pr.compare_price)}
+                                            
+                                        {/if}
+                                        </span>
+                                    </p>
+                                    <h5><a class="product_link" href="{$pr.frontend_url}" title="{$pr.name}">{$pr.name}</a></h5>
+                                    <p class="product_desc">{$pr.summary}</p>
+                                    <!--<div class="product_content">
+                                        <a class="exclusive btn btn-default ajax_add_to_cart_button btn_add_cart" rel="ajax_id_product_{$i}" href="javascript:;" title="Добавить в корзину">
+                                            <span class="add2cart btn_{$pr.id}" onclick="add_cart('{$pr.id}','1')">Добавить в корзину</span>
+                                        </a>
+                                        <a class="button btn btn-default" href="{$pr.frontend_url}" title="Посмотреть">Посмотреть</a>
+                                    </div>
+                                </div>
+                            </li>
+                            {$i=$i+1}
+                            {/foreach}
+                        </ul>-->
+                    <div class="left_text_block">
+                        <div class="text" >
+                            <h1>Изделия из серебра и золота</h1>
+                            <p>В нашем магазине вы можете купить православные изделия из серебра и золота не отходя от компьютера. Мы доставим ваш заказ в любой уголок страны.</p>
+                            
+                            <div align="center"><img src="http://artosgold.ru/images/main_crosses.jpg" width="400px"></div>
+                            
+                            <h2>Производство</h2>
+                            <p><strong>ООО ПТК "Артос"</strong> — одна из немногих компаний, которая самостоятельно занимается производством изделий из серебра и золота православной тематики. Даже если вы не найдете интересующее вас изделие в нашем интернет магазине, мы можем выполнить это изделие на заказ.</p>
+                            <h2>Оптом и в розницу</h2>
+                            <p>Любое изделие представленное на сайте, будь то крест, образок, кольцо или браслет вы можете <a href="/optovym-zakazchikam/">купить оптом</a> и в розницу. Для оптовых покупателей действует система скидок.</p>
+                            <p>Розничные продажи через интернет-магазин Artosgold.ru - ИП Андреева Наталья Константиновна</p>
+                        </div>
+                    </div>
+                    <div class="right_text_block">
+                        <div class="news_box">
+    
+                            <div class="archiv_news"><a href="javascript:;">Новости</a></div>
+                                {$blog = $wa->blog->blog(1)}
+                                {$posts = $wa->blog->posts(1,4)}
+                                {foreach $posts as $post}
+                                {$date = $post[datetime]}
+                                        <div class="new_box">
+                                            <div class="new_content">    
+                                                <div class="new_head"><a href="/blog/news/{$post['url']}">{$post['title']}</a></div>
+                                                <div class="new_date">{$post.datetime|wa_datetime:"humandate"}</div>
+                                               <div class="new_text">
+                                                    <a href="/blog/news/{$post['url']}" class="new_link"><img src="{blogLogopostPlugin::getImgUrl($post['id'])}" />{$post['text_before_cut']|unescape}</a>
+                                                </div>
+                                                <div class="new_shadow"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/foreach}
+                               
+                                
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- get products from predefined product lists 'promo' and 'bestsellers' -->
+
+
+
+    
+    
+

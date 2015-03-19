@@ -1,0 +1,273 @@
+<script type="text/javascript" src="{$wa_theme_url}cart.js"></script>
+<script type="text/javascript" src="{$wa_theme_url}checkoutvalidator.js"></script>
+
+<link href="{$wa_active_theme_url}checkout.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+<!-- following CSS hides top navigation menu; remove <style>…</style> to unhide -->
+
+{$cart_total = $wa->shop->cart->total()}
+{$cart_items=$wa->shop->cart->items()}
+
+{if $wa->user('create_method') == "add"}<span class="discount" style="display:none">40</span>{/if}
+    <div class="checkout_cart">
+        <div class="checkout_head">Ваша корзина</div>
+            <div class="cart-head">
+                {if $wa->user('create_method') != "add"}
+                    <div class="priceh">Цена</div>
+                    <div class="count">Количество</div>
+                    <div class="total_price">Сумма</div>
+                {else}
+                    <div class="priceh">Размер/Количество</div>
+                {/if}
+        </div>
+    
+        {if $wa->user('create_method') != "add"}
+            {foreach $cart_items as $item}
+                
+                
+                <div class="product_cart product_cart_{$item.id} cart" data-id="{$item.id}">
+                    <div class="img min-width">
+                        <!--<a href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}"></a>--><a href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}" target="_blanck">{$wa->shop->productImgHtml($item.product, '200')}</a>
+                    </div>
+                    <div class="name">
+                        <a href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}" target="_blank">{$item.name|escape}</a>
+                        {if !empty($item.error)}<script>alert('{$item.error|escape}');</script>{/if}
+                    </div>
+                    <div class="first_price">
+                        {if $wa->user('create_method') == "add"}
+                            {shop_currency_html($price)}
+                        {else}
+                            {shop_currency_html($item.price)}
+                        {/if}
+                    </div>
+                    <div class="count">
+                        <span class="count_plus" data="{$item.id}"></span>
+                        <input data="{$item.id}" type="text" name="quantity[{$item.id}]" value="{$item.quantity}" class="qty qty{if !empty($item.error)} error{/if}_{$item.id}">
+                        <span class="count_minus" data="{$item.id}"></span>
+                        
+            			        
+            			    
+                    </div>
+                    {$full_price = $item.price*$item.quantity}
+                    <div class="align-center item-total item-total_{$item.id} nowrap">{shop_currency($full_price, true)}</div>
+                    <div class="delete"><a class="delete" href="#" title="[`Remove from cart`]" data="{$item.id}"><span class="del_cart"></span>Удалить</a></div>
+                </div>
+                {$f_price = $f_price + $full_price}
+            {/foreach}
+        {/if}
+    
+        {if $wa->user('create_method') == "add"}
+            {foreach $cart_items as $item}
+                <div class="product_cart product_cart_{$item.id} cart" data-id="{$item.id}" style="display:none">
+                    <div class="img min-width">
+                       <span class='img_url_f'  id="{$item.product.id}">{$wa->shop->productImgHtml($item.product, '96x96')}</span>
+                    </div>
+                </div>
+            {/foreach}
+            <div style="display:block; float:left; width:100%; margin-bottom:30px;">    
+                {foreach $cart_items as $item}
+                    {$itemcode = $item.code}
+                {/foreach}
+                {shopSizeProductC::getSizeC($itemcode)}
+            </div> 
+         
+            {literal}
+        	    <script>
+        		    $(document).ready(function() {
+        		        var img_url = $('.img_url_f');
+                        for(var i=0; i<img_url.length; i++) 
+                        {
+                            id = img_url[i].id;
+                            url_img = img_url[i].innerHTML; 
+                            $('.img_url_'+id).html(url_img);
+                        }
+        		    });
+        		</script>
+        	{/literal}
+        {/if}             
+    
+        {if $wa->user('create_method') != "add"}
+            <div class="cart-total align-center total bold nowrap">Итого: 
+                {if $wa->user('create_method') == "add"}
+                    {shop_currency_html($f_price)}
+                {else}
+                    {shop_currency($cart_total, true)}
+                {/if}
+            </div>
+        {/if}
+    </div>
+
+    <div class="checkout_left">
+        <div class="head">
+            <div class="checkout_head">Оформление заказа</div>
+        </div>
+        <div class="checkout">
+
+        {if isset($checkout_steps)}
+        <!-- checkout step content -->
+        {$icons=0}
+        {foreach $checkout_steps as $step_id => $s}
+        {$icons = $icons+1}
+            <div class="checkout-step step-{$step_id}">
+                <form class="checkout-form {if $s@last}last{/if}" method="post" action="">
+                    <h2 class="{if isset($_upcoming_flag)}upcoming{/if}{if $step_id == $checkout_current_step}{$_upcoming_flag = 1}{/if}">
+                      <span class="icons{$icons}"></span><a href="#">{if $s.name == "Подтверждение"}Комментарий к заказу{else}{$s.name}{/if}</a>
+                    </h2>
+                    {if $s@first}
+                        <div class="checkout-step-content auth" {if $checkout_current_step != $step_id}style="display:none"{/if}>
+                            {if $wa->isAuthEnabled() && !$wa->user()->isAuth()}
+                                <!-- authorized / not authorized selector -->
+                                <ul class="menu-v">
+                                    <li><label><input name="user_type" type="radio" {if !$wa->post('wa_auth_login')}checked{/if} value="0"> [`I’m a new customer`]</label></li>
+                                    <li><label><input name="user_type" type="radio" {if $wa->post('wa_auth_login')}checked{/if} value="1"> [`I already have an account`]</label></li>
+                                </ul>
+                                <div id="login-form"{if !$wa->post('wa_auth_login')} style="display:none"{/if}>
+                                    {include file="login.html" without_form=true}
+                                </div>
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $("#login-form input").attr('disabled', 'disabled');
+                                        $("input[name='user_type']").change(function () {
+                                            if ($("input[name='user_type']:checked").val() == '1') {
+                                                $("#login-form input").removeAttr('disabled');
+                                                $(this).closest('div.auth').next(".checkout-step-content").hide();
+                                                $("input[type=submit]:last").hide();
+                                                $("#login-form").show();
+                                            } else {
+                                                $("#login-form input").attr('disabled', 'disabled');
+                                                $("#login-form").hide();
+                                                $(this).closest('div.auth').next(".checkout-step-content").show();
+                                                $("input[type=submit]:last").show();
+                                            }
+                                        });
+                                        {if $checkout_current_step == $step_id}
+                                            $("input[name='user_type']").change();
+                                        {/if}
+                                    });
+                                </script>
+                                
+                            {else}
+                            <!-- authorized -->
+                               
+                            {/if}
+                        </div>
+                    {/if}
+    
+                    <div class="checkout-step-content" style="{if $s@first}margin-top: {if $step_id == 'contactinfo'}-53px;{else}-23px;{/if}{/if}{if $checkout_current_step != $step_id || $wa->post('wa_auth_login')} display:none;{/if}">
+                        {if $checkout_current_step == $step_id}
+                            {if in_array($step_id,['contactinfo', 'shipping', 'payment', 'confirmation'])}
+                                {include file="checkout.`$step_id`.html"}
+                            {else}
+                                {$s.content}
+                            {/if}
+                        {else}
+                            <div class="checkout-content" data-step-id="{$step_id}"></div>
+                        {/if}
+                        <div class="clear-both"></div>
+                        <input type="hidden" name="step" value="{$step_id}">
+                        {if $s@last}
+                        {if empty($error)}
+                        <div class="float-right">
+                            <input type="submit" class="large bold order_btn" value="">
+                        </div>
+                        {/if}
+                        {else}
+                        <input type="submit" class="btn large bold order_btn" value="[`Next &rarr;`]">
+                        {/if}
+                        <div class="clear-both"></div>
+                    </div>
+                </form>
+            </div>
+        {/foreach}
+        {else}
+            <div class="checkout-step">
+                {include file="checkout.`$checkout_current_step`.html"}
+            </div>
+        {/if}
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        function checkoutStep(step_id) {
+            $.get("{$wa->getUrl('/frontend/checkout')}" + step_id + '/', function (response) {
+                var current = $(".checkout-step .checkout-step-content:visible");
+                var current_step_id =  current.find(".checkout-content").data('step-id');
+                if (current_step_id != step_id) {
+                    current.animate( { height: 0 }, 200, function() { $(this).hide(); } );
+                    current.parent().find('a.back').hide();
+                }
+                $(".checkout-step.step-" + step_id + " .checkout-content").replaceWith(response);
+                $(".checkout-step.step-" + step_id + " a.back").show();
+                $(".checkout-step.step-" + step_id + ' h2').removeClass('upcoming')
+                $(".checkout-step.step-" + step_id).next('.checkout-step').each(function () {
+                    $(this).find('h2').addClass('upcoming');
+                });
+                $(".checkout-step.step-" + step_id).prev('.checkout-step').each(function () {
+                    $(this).find('h2').removeClass('upcoming');
+                });
+                if (current_step_id != step_id) {
+                    $(".checkout-step.step-" + step_id + " .checkout-step-content").show(0).css({ height: 'auto'});
+                }
+                if ($(".checkout-step.step-" + step_id + ' .auth').length) {
+                    $("input[name='user_type']").change();
+                }
+            });
+        }
+        $(".checkout h2 a").click(function () {
+            if ($(this).hasClass('hint')) {
+                if ($(this).hasClass('back')) {
+                    checkoutStep($(this).closest('div').prev().find('.checkout-content').data('step-id'));
+                    return false;
+                }
+                return true;
+            }
+            if ($(this).closest('h2').hasClass('upcoming')) {
+                return false;
+            }
+            checkoutStep($(this).closest('div').find('.checkout-content').data('step-id'));
+            return false;
+        });
+        $("form.checkout-form").on('submit', function () {
+            var f = $(this);
+            if (f.hasClass('last') || ($("#login-form").length && !$("#login-form input:submit").attr('disabled'))) {
+                return true;
+            }
+            $.post(f.attr('action') || window.location, f.serialize(), function (response) {
+                var content = $(response);
+                var step_id = content.data('step-id');
+                var current = $(".checkout-step .checkout-step-content:visible");
+                var current_step_id =  current.find(".checkout-content").data('step-id');
+                if (current_step_id != step_id) {
+                    current.animate({ height: 0}, 200, function() { $(this).hide(); } );
+                    current.parent().find('a.back').hide();
+                }
+                $(".checkout-step.step-" + step_id + " .checkout-content").replaceWith(content);
+                $(".checkout-step.step-" + step_id + " a.back").show();
+                $(".checkout-step.step-" + step_id + " input[type=submit]:last").show();
+                if (current_step_id != step_id) {
+                    $(".checkout-step.step-" + step_id + " .checkout-step-content").show(0).css({ height: 'auto'});
+                }
+                $(".checkout-step.step-" + step_id + ' h2').removeClass('upcoming')
+                $(".checkout-step.step-" + step_id).next('.checkout-step').each(function () {
+                    $(this).find('h2').addClass('upcoming');
+                });
+                $(".checkout-step.step-" + step_id).prev('.checkout-step').each(function () {
+                    $(this).find('h2').removeClass('upcoming');
+                });
+            });
+            return false;
+        });
+    });
+</script>
+</div>
+  
+  
+  
+     
+   
+    
+    
+ 
+
+ 
+

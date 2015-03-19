@@ -1,0 +1,102 @@
+{literal}
+<script>
+function orderGold(){
+var error = "";
+var checkbox_mat = 0;
+var checkbox_type = 0;
+mat = "";
+type_work = "";
+size_object = 
+$('.checkbox_type:checked').each(function(){
+        $(this).parent(".item").css("background-image","url(/images/sprites.png)");
+        $(this).parent(".item").css("background-position","-221px -130px");
+        checkbox_type = Number(checkbox_type)+1;
+        type_work = type_work + $(this).val() + ",";
+});
+
+$('.checkbox_mat:checked').each(function(){
+        
+        $(this).parent(".item").css("background-image","url(/images/sprites.png)");
+        $(this).parent(".item").css("background-position","-221px -130px");
+        checkbox_mat = Number(checkbox_mat)+1;
+        mat = mat + $(this).val() + ",";
+});
+
+
+    
+    fio = $(".fio").val();
+    tel = $(".tel2").val();
+    mail=$(".pochta").val();
+    tmp_mail = /^[a-z0-9\._\-]+@[0-9a-z\._\-]{2,}\.[a-z]{2,10}$/i;
+    result_mail = mail.match(tmp_mail);
+    if(result_mail != null){$(".pochta").css("border","1px solid #ccc");$(".pochta").css("box-shadow","none");}else{error="Mail"; $(".pochta").css("border","1px solid #D5241C"); $(".pochta").css("box-shadow","0px 0px 10px #D5241C");}
+    
+    tmp_fio = /[0-9\.,_\-@!#№";%:?*\(\)]{1,2}/i;
+    result_fio = fio.match(tmp_fio);
+    if(result_fio == null)
+    {
+        if(fio != "ФИО")
+        {
+            $(".fio").css("border","1px solid #ccc"); 
+            $(".fio").css("box-shadow","none");
+        }
+        else
+        {
+            error = error+" ФИО"; 
+            $(".fio").css("border","1px solid #D5241C"); 
+            $(".fio").css("box-shadow","0px 0px 10px #D5241C");
+        }
+    }
+    else
+    {
+            error = error+" ФИО"; 
+            $(".fio").css("border","1px solid #D5241C"); 
+            $(".fio").css("box-shadow","0px 0px 10px #D5241C");
+    }
+    
+    
+    
+    
+    
+
+    
+    adres = $(".adres").val();
+    
+    if (adres != "Адрес местонахождения объекта золочения")
+    {
+        $(".adres").css("border","1px solid #ccc"); 
+        $(".adres").css("box-shadow","none");
+    }
+    else
+    {
+        $(".adres").css("border","1px solid #D5241C"); 
+        $(".adres").css("box-shadow","0px 0px 10px #D5241C");
+        error = error+" Не указан адрес местонахождения объекта золочения";
+    }
+    
+    if (error == "" && adres != "Ваше сообщение")
+    {
+        $.ajax({
+        type: "POST",
+        data: "fio="+fio+"&mail="+mail+"&tel="+tel+"&adres="+adres,
+        url: "/assets/order_mail.php",
+        dataType: "json",
+     
+          success: function(data)
+                {
+                    alert("Ваше сообщение успешно отправлено");
+                }
+         
+          
+        });
+    }
+    
+}
+</script>
+{/literal}
+
+
+<h1>{$page.name}</h1>
+<div  role="main" style="line-height: 1.5em;" class="pagelocation">
+    {$page.content}
+</div>

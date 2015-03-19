@@ -1,0 +1,22 @@
+{$promos = $wa->shop->productSet('popular')}
+<section id="blockbestsellers" class="block products_block column_box">
+    <h4><span>Популярные товары</span><i class="column_icon_toggle icon-plus-sign"></i></h4>
+    <div class="block_content toggle_content">
+        <ul>
+            {foreach $promos as $pr}
+            <li class="clearfix shop_box">
+                <a class="products_block_img" title="{$pr.name}" href="{$pr.frontend_url}">
+                    {$wa->shop->productImgHtml($pr, '200', ['itemprop' => 'image', 'alt' => $pr.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
+                </a>
+                <div>
+                    <h5>
+                        <a class="product_link" title="{$pr.name}" href="{$pr.frontend_url}">{$pr.name}</a>
+                    </h5>
+                    <p class="product_descr">{$pr.summary}</p>
+                </div>
+            </li>
+            {/foreach}
+        </ul>
+        <!--<a class="btn btn-default button_large" title="Все популярные товары" href="javascript:;">Все популярные товары</a>-->
+    </div>
+</section>

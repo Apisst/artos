@@ -1,0 +1,76 @@
+.opt__size_box{
+display:block;
+float:left;
+width:100%;
+margin:10px 0px;
+border-bottom:1px solid #f1f1f1;
+}
+
+.opt__size_box span{
+display: block;
+    float: left;
+    margin: 3px 0 0;
+    width: 30px;
+}
+
+.opt__size_box span .icon16{
+display:none;
+}
+
+.size_count_box{
+    display:block;
+    float:left;
+    width:30px;
+    height:autopx;
+    border:1px solid #ccc;
+    margin-top:-5px;
+    padding:3px;
+    margin:3px;
+}
+
+.opt__size_box input{
+  
+    float: left;
+    height: 20px;
+    margin-top: 0;
+    padding: 2px;
+    text-align: right;
+    width: 30px;
+    border:none;
+}
+
+.size_count{
+background-color:  display: block; float: left; margin: 5px; padding: 3px;
+}
+
+.count_plus{
+display:block;
+float:right;
+
+width:45px;
+}
+
+.pluss{
+    display:block;
+    float:left;
+    background-image:url(/images/count_plus.png);
+    width:7px;
+    height:7px;
+    margin:2px;
+}
+
+.minuss{
+    display:block;
+    float:left;
+    background-image:url(/images/count_minus.png);
+    width:7px;
+    height:7px;
+    margin:2px;
+}
+
+.count_pluss_minuss_box{
+    display:block; 
+    float:left; 
+    width:10px; 
+    height:20px;
+}

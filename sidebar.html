@@ -1,0 +1,165 @@
+    <section id="layered_block_left" class="column_box block">
+        <div class="block_content">
+            <form method="get" action="{$wa->currentUrl(0,1)}">
+            <div>
+            	{foreach $filters as $fid => $filter}
+                	{if $filter.name|escape != ""}
+                    	<div class="titled_box">
+			                <h2 class="clearfix">
+        						<span class="layered_subtitle">{$filter.name|escape}</span>
+            					<span class="layered_close"><a href="#" rel="ul_layered_condition_0"><i class="icon-minus-sign"></i></a></span>
+        					</h2>
+    	                	<ul id="ul_layered_condition_0" class="store_list_filter ul_filter clearfix">
+                                {foreach $filter.values as $v_id => $v}
+                            	<li class="nomargin hiddable  clearfix">
+                					<div id="uniform-layered_{$filter.code}_{$v_id}" class="checkbox_box">
+                						<span>
+                						    <input id="layered_{$filter.code}_{$v_id}" class="checkbox" type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if}  value="{$v_id}"> 
+                						</span>
+                					</div>
+                					<label for="layered_{$filter.code}_{$v_id}" class="checkbox_label">
+                						{$v}
+                					</label>
+                				</li>
+                			    {/foreach}
+                		    </ul>
+                		</div>
+                	{/if}
+                {/foreach}
+            </div>
+            {if $category}
+            
+            <div class="layered_price titled_box" style="display: none;">
+            	<h2 class="clearfix">
+            		<span class="layered_subtitle">Цена</span>
+            		<span class="layered_close"><a href="#" rel="ul_layered_price_0"><i class="icon-minus-sign"></i></a></span>
+            	</h2>
+                <ul id="ul_layered_price_0" class="store_list_filter ul_filter clearfix">
+                    <li class="nomargin row">
+                        <div class="form-group clearfix col-xs-6 col-sm-12">
+                        	<label class="col-xs-2 control-label">От</label>
+                            <div class="col-xs-9">
+                                <input name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if}class="layered_price_range layered_input_range_min layered_input_range form-control" id="layered_price_range_min" type="text" value=""/>
+                        	</div>
+                            <span class="layered_price_range_unit col-xs-1 control-label">р.</span>
+                        </div>
+                        <div class="form-group clearfix col-xs-6 col-sm-12">
+                            <label class="col-xs-2 control-label">до</label>
+                            <div class="col-xs-9">
+                                <input name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} class="layered_price_range layered_input_range_max layered_input_range form-control" id="layered_price_range_max" type="text" value=""/>
+                            </div>
+                            <span class="layered_price_range_unit col-xs-1 control-label">р.</span>
+                        </div>
+                        <span class="layered_price_format" style="display:none;">1</span>
+                        <script type="text/javascript">
+                        	$('#layered_price_range_min').attr('limitValue', 203);
+                        	$('#layered_price_range_max').attr('limitValue', 311);
+                        </script>
+                    </li>
+                </ul>
+                <script type="text/javascript">
+                    $('.checkbox').click(function(){
+                    });
+                    $('.layered_price').show();
+                </script>
+            </div>
+            {/if}
+            </form>
+        </div>
+        
+        <div id="layered_ajax_loader" style="display: none;">
+            <p class="loader_position"></p>
+        </div>
+    </section>
+    <div class="right_sidebar">
+                {if $wa->shop}
+                    {$products = $wa->shop->productSet("popular")}
+                    {if $product}
+                    {else}
+                    
+                        
+                        {$promos = $wa->shop->productSet('popular')}
+                        <section id="blockbestsellers" class="block products_block column_box">
+                            <h4><span>Популярные товары</span><i class="column_icon_toggle icon-plus-sign"></i></h4>
+                            <div class="block_content toggle_content">
+                                <ul>
+                                    {foreach $promos as $pr}
+                                    <li class="clearfix shop_box">
+                                        <a class="products_block_img" title="{$pr.name}" href="{$pr.frontend_url}">
+                                            {$wa->shop->productImgHtml($pr, '200', ['itemprop' => 'image', 'alt' => $pr.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
+                                        </a>
+                                        <div style="text-align:center">
+                                                <a class="product_link" title="{$pr.name}" href="{$pr.frontend_url}">{$pr.name}</a>
+                                            
+                                        </div>
+                                    </li>
+                                    {/foreach}
+                                </ul>
+                                <!--<a class="btn btn-default button_large" title="Все популярные товары" href="javascript:;">Все популярные товары</a>-->
+                            </div>
+                        </section>
+                    {/if}
+                {/if}
+            </div>
+    {if $product}
+    <section>
+        <div class="block_content">
+            <div class="titled_box">
+			    {$crossselling = $product->crossSelling(0)}
+                {if $crossselling}
+			    <h2 class="clearfix">
+        			<span class="layered_subtitle">Возможно Вас заинтересует</span>
+        		</h2>
+        		
+                    <ul class="thumbs li150px product-list mini">
+                        {foreach $crossselling as $crosssel}
+                            <li class="cross_prod" itemscope itemtype ="http://schema.org/Product">
+                            <div class="image">
+                                <a href="{$crosssel.frontend_url}" title="{$crosssel.name}">
+                                    {$wa->shop->productImgHtml($crosssel, '200', ['itemprop' => 'image', 'alt' => $crosssel.name, 'default' => "`$wa_theme_url`img/dummy96.png"])}
+                                </a>
+                            </div>
+                            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                            <div class="cross_prod_name head_block" itemprop="name" >
+                                {$crosssel.name}
+                            </div>
+                            {if $available}
+                                {if !empty($without_form)}
+                                    <div class="purshase addtocart" {if $crosssel.sku_count > 1}data-url="{$crosssel.frontend_url}?cart=1"{/if}>
+                                        <span class="price nowrap" itemprop="price">{shop_currency_html($crosssel.price)}</span>
+                                        <!--<input class="cross_prod_button" type="button" data-product_id="{$p.id}" data-url="{$wa->getUrl('shop/frontendCart/add')}" value="[`Add to cart`]">-->
+                                    </div>
+                                {else}
+                                    <form class="purchase addtocart" {if $crosssel.sku_count > 1}data-url="{$crosssel.frontend_url}?cart=1"{/if} method="post" action="{$wa->getUrl('shop/frontendCart/add')}">
+                                        <span class="price nowrap right_price" itemprop="price">{shop_currency_html($crosssel.price)}</span>
+                                        <input type="hidden" name="product_id" value="{$crosssel.id}">
+                                        
+                                        <a class="exclusive btn btn-default ajax_add_to_cart_button btn_add_cart" title="Добавить в корзину" href="javascript:;" rel="ajax_id_product_1">
+                    <span class="add2cart btn_{$crosssel.id}" onclick="add_cart('{$crosssel.id}')">Добавить в корзину</span>
+                    </a>
+                                        <!--<input type="submit" value="[`Add to cart`]">-->
+                                        <span class="added2cart" style="display: none;">{sprintf('[`%s is now <a href="%s"><strong>in your shopping cart</strong></a>`]', $crosssel.name, $wa->getUrl('shop/frontend/cart'))}</span>
+                                    </form>
+                                {/if}
+                                <link itemprop="availability" href="http://schema.org/InStock" />
+                            {else}
+                                <span class="price nowrap right_price" itemprop="price">{shop_currency_html($crosssel.price)}</span>
+                                
+                                <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                            {/if}
+                        </div>
+                        {if $crosssel.rating > 0}
+                            <span class="rating nowrap">{$wa->shop->ratingHtml($crosssel.rating)}</span>
+                        {/if}
+                            </li>
+                        {/foreach}
+                    </ul>
+                {/if}
+        	</div>
+        
+            
+        </div>
+    </section>
+    {/if}
+   
+   
